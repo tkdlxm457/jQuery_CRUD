@@ -17,52 +17,38 @@
  */
 // http://tcpschool.com/jquery/jq_ajax_method
 
-let topics = [];
+// 토픽 객체
+let topic = null;
 
-$(document).ready(function () {
-    getList();
+/**
+ * HTML이 로딩이 되면 실행한다.
+ */
+$(document).ready(() => {
+    // 토픽 목록을 요청한다.
+    getTopicList();
 });
 
-function getList() {
+/**
+ * 토픽목록을 조회한다.
+ */
+let getTopicList = ()=> {
     $.ajax({
         url: "http://localhost:3000/board",
         method: 'GET',
         dataType: "json",
-        success: function (data) {
-                    data.forEach((obj, index) => {
-                        let tds = "";
-                        for (const key in obj) {
-                            if (Object.hasOwnProperty.call(obj, key)) {
-                                const el = obj[key];
-                                tds += `<td>${el}</td>`;
-                            }
-                        }
-                        $("#t_list").append(`
-                        <tr>
-                            ${tds}
-                        </tr>
-                        `)          
-                    });
+        success: (topicList) => {
+            // TR 목록을 생성한다.
+            topicList.forEach((el_topic, index) => {
+                // TD목록을 포함한 TR을 생성한다.
+                $("#t_list").append(`<tr id=tr_${index}>${makeTds(el_topic)}</tr>`);
 
-                    // $.each(data, (index, obj) => {
-                    //     $("#t_list").append
-                    //     (`<tr>
-                    //     <td>${obj.id}</td>
-                    //     <td>${obj.description}</td>
-                    //     <td>${obj.create}</td>
-                    //     <td>${obj.author_id}</td>
-                    //     </tr>`)     
-                    // })
-
-            // for(let i=0; i<=data.length; i++){
-            //     $("#t_list").append
-            //     (`<tr>
-            //     <td>${data[i].id}</td>
-            //     <td>${data[i].description}</td>
-            //     <td>${data[i].create}</td>
-            //     <td>${data[i].author_id}</td>
-            //     </tr>`)
-            // }
+                // 생성된 TR에 클릭이벤트를 등록한다.
+                let self = this;
+                $(`#tr_${index}`).on('click', () => {
+                    self.topic = el_topic;
+                    console.log(`id [${self.topic.id}] 의 행이 선택 되었습니다.`)
+                });
+            });
         },
         error: (error) => {
             console.log(error);
@@ -71,99 +57,19 @@ function getList() {
             console.log("조회요청 완료!!!!!!!!");
         }
     });
+} 
+
+/**
+ * td목록을 생성한다.
+ * @param {Object} topic 
+ * @returns td 목록
+ */
+let makeTds = (topic) => {
+    let tds = "";
+    for (const key in topic) {
+        if (Object.hasOwnProperty.call(topic, key)) {
+            tds += `<td>${topic[key]}</td>`;
+        }
+    }
+    return tds;
 }
-
-
-
-
-
-
-
-function getTopics() {
-    // XMLHttpRequest......
-
-    // [TODO] ajax 구현 후 제거
-    topics = [
-        { id: 1, title: "타이틀입니다1.", description: "설명입니다1.", author_id: 1, create: "2021-07-08" },
-        { id: 2, title: "타이틀입니다2.", description: "설명입니다2.", author_id: 1, create: "2021-07-08" },
-        { id: 3, title: "타이틀입니다3.", description: "설명입니다3.", author_id: 1, create: "2021-07-08" },
-        { id: 4, title: "타이틀입니다4.", description: "설명입니다4.", author_id: 1, create: "2021-07-08" },
-    ];
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let topics = [];
-
-// function getTopics() {
-//     // XMLHttpRequest......
-
-//     // [TODO] ajax 구현 후 제거
-//     topics = [
-//         { id: 1, title: "타이틀입니다1.", description: "설명입니다1.", author_id: 1, create: "2021-07-08" },
-//         { id: 2, title: "타이틀입니다2.", description: "설명입니다2.", author_id: 1, create: "2021-07-08" },
-//         { id: 3, title: "타이틀입니다3.", description: "설명입니다3.", author_id: 1, create: "2021-07-08" },
-//         { id: 4, title: "타이틀입니다4.", description: "설명입니다4.", author_id: 1, create: "2021-07-08" },
-//     ];
-
-
-//     // 1.1
-//     var insertTr;
-
-//     topics.forEach(topic => {
-//         insertTr = ""
-
-//         insertTr += `<tr onclick='selectRow(topic)'>`;
-//         insertTr += `<td>${topic.id}</td>`;
-//         insertTr += "<td>이순신</td>";
-//         insertTr += "<td>부산</td>";
-//         insertTr += "</tr>";
-
-//         $("#tbody").append(insertTr);
-//     });
-
-
-
-// }
-
-// function selectRow() {
-
-// }
-
-// function saveTopic() {
-
-// }
-
-// function updateTopic() {
-
-// }
-
-// function deleteTopic() {
-
-// }
