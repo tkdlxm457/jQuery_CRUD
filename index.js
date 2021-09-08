@@ -17,6 +17,18 @@
  */
  // http://tcpschool.com/jquery/jq_ajax_method
 
+// let topics = [];
+
+// function getTopics() {
+//     // XMLHttpRequest......
+
+//     // [TODO] ajax 구현 후 제거
+//     topics = [
+//         { id: 1, title: "타이틀입니다1.", description: "설명입니다1.", author_id: 1, create: "2021-07-08" },
+//         { id: 2, title: "타이틀입니다2.", description: "설명입니다2.", author_id: 1, create: "2021-07-08" },
+//         { id: 3, title: "타이틀입니다3.", description: "설명입니다3.", author_id: 1, create: "2021-07-08" },
+//         { id: 4, title: "타이틀입니다4.", description: "설명입니다4.", author_id: 1, create: "2021-07-08" },
+//     ];
 
 
 
@@ -38,31 +50,6 @@
 
 
 
-
-class tv {
-    private volumn = 0;
-    private channel = 0;
-
-    getVolumn() {
-        return this.volumn;
-    }
-
-    setVolumn(volumn) {
-        this.volumn = volumn;
-    }
-
-    getChannel() {
-        return this.channel;
-    }
-}
-
-
-let lgTv = new tv();
-
-lgTv.getVolumn();
-
-
-lgTv.getVolumn();
 
 
 
