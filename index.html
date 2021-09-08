@@ -6,22 +6,7 @@
     <title>jQuery Intro</title>
     <link href="table.css" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(function () {
-            $("#btn").on("click", function () {
-                var jqxhr = $.ajax("http://localhost:3000")
-                    .done(function () {
-                        alert("성공");
-                    })
-                    .fail(function () {
-                        alert("실패");
-                    })
-                    .always(function () {
-                        alert("완료");
-                    });
-            });
-        });
-    </script>
+
     <script src="./index.js"></script>
 </head>
 
@@ -36,14 +21,12 @@
                     <th>작성일</th>
                 </tr>
             </thead>
-
-            <tbody>
-
+            <tbody id="t_list">
             </tbody>
             <div class="bottom">
-                <button id="btn">작성</button>
-                <button>수정</button>
-                <button>삭제</button>
+                <button id="btn_create">작성</button>
+                <button id="btn_update">수정</button>
+                <button id="btn_delete">삭제</button>
             </div>
         </table>
     </div>
