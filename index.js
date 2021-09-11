@@ -26,6 +26,9 @@ let topic = null;
 $(document).ready(() => {
     // 토픽 목록을 요청한다.
     getTopicList();
+
+    // 이벤트를 등록한다.
+    initEventListener();
 });
 
 /**
@@ -35,18 +38,20 @@ let getTopicList = ()=> {
     $.ajax({
         url: "http://localhost:3000/board",
         method: 'GET',
-        dataType: "json",
+        dataType: "JSON",
         success: (topicList) => {
+            $("#t_list").empty();
+
             // TR 목록을 생성한다.
             topicList.forEach((el_topic, index) => {
                 // TD목록을 포함한 TR을 생성한다.
                 $("#t_list").append(`<tr id=tr_${index}>${makeTds(el_topic)}</tr>`);
 
-                // 생성된 TR에 클릭이벤트를 등록한다.
-                let self = this;
                 $(`#tr_${index}`).on('click', () => {
-                    self.topic = el_topic;
-                    console.log(`id [${self.topic.id}] 의 행이 선택 되었습니다.`)
+                    topic = el_topic;
+                    console.log(`id [${topic.id}] 의 행이 선택 되었습니다.`)
+                    $("#title").val(topic.title);
+                    $("#description").val(topic.description);
                 });
             });
         },
@@ -73,3 +78,56 @@ let makeTds = (topic) => {
     }
     return tds;
 }
+
+let initEventListener = () => {
+    $("#myForm").submit(function (event){
+        event.preventDefault();
+        var data = $(this).serialize();
+        let methodType = event.originalEvent.submitter.id;
+        if (methodType === 'SAVE') {
+            $.ajax({
+                url: "http://localhost:3000/board",
+                method: 'POST',
+                data: data,
+                dataType: "json",
+                success : function(req){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    getTopicList();
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패.")
+                }
+            }); 
+        } else if (methodType === 'UPDATE') {
+            console.log(methodType)
+            $.ajax({
+                url: `http://localhost:3000/board/${topic.id}`,
+                method: 'PUT',
+                data: data,
+                dataType: "JSON",
+                success : function(req){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    getTopicList();
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패.")
+                }
+            }); 
+        } else if (methodType === 'DELETE'){
+            console.log(topic)
+            $.ajax({
+                url: `http://localhost:3000/board/${topic.id}`,
+                method: 'DELETE',
+                data: data,
+                dataType: "JSON",
+                success : function(req){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    getTopicList();
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패.")
+                }
+            }); 
+        }
+
+
+    });
+}
+
